@@ -13,4 +13,5 @@ object Fail {
   case class IncorrectInput(msg: String) extends Fail
   case class Unauthorized(msg: String) extends Fail
   case object Forbidden extends Fail
+  case class Unsupported(what: String) extends Fail
 }

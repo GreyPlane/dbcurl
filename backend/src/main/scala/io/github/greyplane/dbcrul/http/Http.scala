@@ -11,7 +11,7 @@ import sttp.tapir.json.circe.TapirJsonCirce
 import sttp.tapir.{EndpointOutput, PublicEndpoint, Tapir}
 
 /** Helper class for defining HTTP endpoints. Import the members of this class when defining an HTTP API using tapir. */
-class Http() extends Tapir with TapirJsonCirce with TapirSchemas {
+object Http extends Tapir with TapirJsonCirce with TapirSchemas {
 
   val jsonErrorOutOutput: EndpointOutput[Error_OUT] = jsonBody[Error_OUT]
 
@@ -35,6 +35,7 @@ class Http() extends Tapir with TapirJsonCirce with TapirSchemas {
     case Fail.IncorrectInput(msg) => (StatusCode.BadRequest, msg)
     case Fail.Forbidden           => (StatusCode.Forbidden, "Forbidden")
     case Fail.Unauthorized(msg)   => (StatusCode.Unauthorized, msg)
+    case Fail.Unsupported(what)   => (StatusCode.BadRequest, s"Unsupported operation: $what")
     case _                        => InternalServerError
   }
 

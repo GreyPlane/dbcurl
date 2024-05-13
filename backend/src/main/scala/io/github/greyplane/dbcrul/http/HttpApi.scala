@@ -12,6 +12,8 @@ import sttp.tapir.server.http4s.{Http4sServerInterpreter, Http4sServerOptions}
 import sttp.tapir.server.interceptor.cors.CORSInterceptor
 import sttp.tapir.server.interceptor.log.DefaultServerLog
 import sttp.tapir.server.model.ValuedEndpointOutput
+import sttp.tapir.swagger.SwaggerUIOptions
+import sttp.tapir.swagger.bundle.SwaggerInterpreter
 
 /** Interprets the endpoint descriptions (defined using tapir) as http4s routes, adding CORS, metrics, api docs support.
   *
@@ -22,7 +24,6 @@ import sttp.tapir.server.model.ValuedEndpointOutput
   *   - `/` - serving frontend resources
   */
 class HttpApi(
-    http: Http,
     mainEndpoints: NonEmptyList[ServerEndpoint[Any, IO]],
     config: HttpConfig
 ) {
@@ -31,7 +32,7 @@ class HttpApi(
   val serverOptions: Http4sServerOptions[IO] = Http4sServerOptions
     .customiseInterceptors[IO]
     // all errors are formatted as json, and there are no other additional http4s routes
-    .defaultHandlers(msg => ValuedEndpointOutput(http.jsonErrorOutOutput, Error_OUT(msg)), notFoundWhenRejected = true)
+    .defaultHandlers(msg => ValuedEndpointOutput(Http.jsonErrorOutOutput, Error_OUT(msg)), notFoundWhenRejected = true)
     .serverLog {
       DefaultServerLog(
         doLogWhenReceived = request => Console[IO].println(request),
@@ -46,12 +47,16 @@ class HttpApi(
 
   lazy val routes: HttpRoutes[IO] = Http4sServerInterpreter(serverOptions).toRoutes(allEndpoints)
 
+  lazy val docEnpdoints =
+    SwaggerInterpreter(swaggerUIOptions = SwaggerUIOptions.default.contextPath(apiContextPath))
+      .fromServerEndpoints(mainEndpoints.toList, "dbcurl", "v1")
+
   lazy val allEndpoints: List[ServerEndpoint[Any, IO]] = {
     // creating the documentation using `mainEndpoints` without the /api/v1 context path; instead, a server will be added
     // with the appropriate suffix
     // for /api/v1 requests, first trying the API; then the docs
     val apiEndpoints =
-      mainEndpoints.map(se => se.prependSecurityIn(apiContextPath.foldLeft(emptyInput: EndpointInput[Unit])(_ / _)))
+      mainEndpoints.map(se => se.prependSecurityIn(apiContextPath.foldLeft(emptyInput: EndpointInput[Unit])(_ / _))) ++ docEnpdoints
 
     // for all other requests, first trying getting existing webapp resource (html, js, css files), from the /webapp
     // directory on the classpath; otherwise, returning index.html; this is needed to support paths in the frontend
