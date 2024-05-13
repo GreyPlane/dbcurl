@@ -39,7 +39,7 @@ object Main extends ResourceApp.Forever {
     * as long as our application runs).
     */
   override def run(list: List[String]): Resource[IO, Unit] = for {
-    dbs <- MapRef.ofScalaConcurrentTrieMap[IO, String, (DBConfig, HikariTransactor[IO])].toResource
+    dbs <- MapRef.ofScalaConcurrentTrieMap[IO, String, DB].toResource
     dbApi = new db.Api(dbs)
     httpApi = new HttpApi(dbApi.dbEndpoints, config.api)
     _ <- httpApi.resource
