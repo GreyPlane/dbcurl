@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "bootzooka.fullname" . }}
+  name: {{ include "dbcrul.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "bootzooka.name" . }}
-    helm.sh/chart: {{ include "bootzooka.chart" . }}
+    app.kubernetes.io/name: {{ include "dbcrul.name" . }}
+    helm.sh/chart: {{ include "dbcrul.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: {{ .Values.bootzooka.service.type }}
+  type: {{ .Values.dbcrul.service.type }}
   ports:
-    - port: {{ .Values.bootzooka.service.port }}
+    - port: {{ .Values.dbcrul.service.port }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "bootzooka.name" . }}
+    app.kubernetes.io/name: {{ include "dbcrul.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

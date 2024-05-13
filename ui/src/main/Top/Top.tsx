@@ -22,7 +22,7 @@ export const Top: React.FC = () => {
     <Navbar variant="dark" bg="dark" sticky="top" collapseOnSelect expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          Bootzooka
+          Dbcrul
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

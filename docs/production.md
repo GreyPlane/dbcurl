@@ -8,7 +8,7 @@ title:  "Production deployment"
 To build an executable jar, simply run (in sbt) `backend/assembly` (that is, the `assembly` task in the `backend` subproject). This will create a fat-jar with all the code, processed javascript, css and html. You can run the jar simply by running java:
 
 ```
-java -jar backend/target/scala-2.12/bootzooka.jar
+java -jar backend/target/scala-2.12/dbcrul.jar
 ```
 
 ## Docker
@@ -20,7 +20,7 @@ You can test the image by using the provided `docker-compose.yml` file.
 
 ## Kubernetes
 
-Use [Helm](https://helm.sh/) to easily deploy Bootzooka into [Kubernetes](https://kubernetes.io/) cluster.
+Use [Helm](https://helm.sh/) to easily deploy Dbcrul into [Kubernetes](https://kubernetes.io/) cluster.
 
 ### Add SoftwareMill Helm repository
 
@@ -29,24 +29,24 @@ helm repo add softwaremill https://charts.softwaremill.com/
 helm repo update
 ```
 
-### Fetch and Customize Bootzooka chart
+### Fetch and Customize Dbcrul chart
 
 ```
-helm fetch softwaremill/bootzooka --untar
+helm fetch softwaremill/dbcrul --untar
 ```
 
-### Install Bootzooka chart
+### Install Dbcrul chart
 
 ```
-helm install --generate-name bootzooka
+helm install --generate-name dbcrul
 ```
 
-Please see [Bootzooka Helm Chart documentation](https://github.com/softwaremill/bootzooka/blob/master/helm/bootzooka/README.md) for more information, including configuration options.
+Please see [Dbcrul Helm Chart documentation](https://github.com/softwaremill/dbcrul/blob/master/helm/dbcrul/README.md) for more information, including configuration options.
 
 
 ## Heroku
 
-Bootzooka-based applications can be easily deployed to [Heroku](https://www.heroku.com).
+Dbcrul-based applications can be easily deployed to [Heroku](https://www.heroku.com).
 
 First, you need to create a Heroku account and install the [toolbelt](https://toolbelt.heroku.com).
 Once this is done, login to heroku from the command line with `heroku login` while in the application's main directory.
@@ -70,9 +70,9 @@ Using a file-system based H2 database on a non-dev environment isn't probably a 
 heroku addons:create heroku-postgresql:hobby-dev
 ````
 
-Bootzooka already includes the Postgres driver and properly recognizes the `DATABASE_URL` environment variable that is set by Postgres Heroku.
+Dbcrul already includes the Postgres driver and properly recognizes the `DATABASE_URL` environment variable that is set by Postgres Heroku.
 
-Now you can deploy your app. Bootzooka includes an sbt task which will build the fat-jar and upload it:
+Now you can deploy your app. Dbcrul includes an sbt task which will build the fat-jar and upload it:
 
 ````
 sbt deployHeroku

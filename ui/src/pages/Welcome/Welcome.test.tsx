@@ -8,6 +8,6 @@ test("renders text content", () => {
       <Welcome />
     </MemoryRouter>,
   );
-  const header = screen.getByText("Welcome to Bootzooka!");
+  const header = screen.getByText("Welcome to Dbcrul!");
   expect(header).toBeInTheDocument();
 });

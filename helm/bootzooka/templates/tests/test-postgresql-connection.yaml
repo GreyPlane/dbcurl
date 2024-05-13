@@ -14,27 +14,27 @@ spec:
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
-              name: {{ include "bootzooka.fullname" . }}-config
+              name: {{ include "dbcrul.fullname" . }}-config
               key: SQL_HOST
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:
-              name: {{ include "bootzooka.fullname" . }}-config
+              name: {{ include "dbcrul.fullname" . }}-config
               key: SQL_PORT
         - name: DB_DATABASE
           valueFrom:
             configMapKeyRef:
-              name: {{ include "bootzooka.fullname" . }}-config
+              name: {{ include "dbcrul.fullname" . }}-config
               key: SQL_DBNAME
         - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:
-              name: {{ include "bootzooka.fullname" . }}-config
+              name: {{ include "dbcrul.fullname" . }}-config
               key: SQL_USERNAME
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ include "bootzooka.fullname" . }}-secret
+              name: {{ include "dbcrul.fullname" . }}-secret
               key: SQL_PASSWORD
       command:
         - /bin/bash

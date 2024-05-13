@@ -13,7 +13,7 @@ export const Welcome: React.FC = () => (
         <Fade appear in>
           <Container className="d-flex flex-column justify-content-center align-items-center">
             <h3>Hi there!</h3>
-            <h1>Welcome to Bootzooka!</h1>
+            <h1>Welcome to Dbcrul!</h1>
             <p className="mt-3 px-4">
               In this template application you can{" "}
               <Link to="/register" className="link-dark">
@@ -38,14 +38,14 @@ export const Welcome: React.FC = () => (
               <Image fluid src={logo} alt="SoftwareMill" width="500" />
             </a>
             <p>
-              If you are interested in how Bootzooka works,
+              If you are interested in how Dbcrul works,
               <br />
               you can browse the{" "}
-              <a href="http://softwaremill.github.io/bootzooka/" target="blank">
+              <a href="http://softwaremill.github.io/dbcrul/" target="blank">
                 Documentation
               </a>{" "}
               or{" "}
-              <a href="https://github.com/softwaremill/bootzooka" target="blank">
+              <a href="https://github.com/softwaremill/dbcrul" target="blank">
                 Source code
               </a>
               .

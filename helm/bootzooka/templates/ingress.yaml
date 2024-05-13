@@ -1,4 +1,4 @@
-{{- if .Values.bootzooka.ingress.enabled }}
+{{- if .Values.dbcrul.ingress.enabled }}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
 {{- else if semverCompare ">=1.14-0 <1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -8,20 +8,20 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ include "bootzooka.fullname" . }}-ingress
+  name: {{ include "dbcrul.fullname" . }}-ingress
   labels:
-    app.kubernetes.io/name: {{ include "bootzooka.name" . }}
-    helm.sh/chart: {{ include "bootzooka.chart" . }}
+    app.kubernetes.io/name: {{ include "dbcrul.name" . }}
+    helm.sh/chart: {{ include "dbcrul.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.bootzooka.ingress.annotations }}
+{{- with .Values.dbcrul.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.bootzooka.ingress.tls_enabled }}
+{{- if .Values.dbcrul.ingress.tls_enabled }}
   tls:
-  {{- range .Values.bootzooka.ingress.tls }}
+  {{- range .Values.dbcrul.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -30,8 +30,8 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- $serviceName := include "bootzooka.fullname" . -}}
-  {{- range .Values.bootzooka.ingress.hosts }}
+  {{- $serviceName := include "dbcrul.fullname" . -}}
+  {{- range .Values.dbcrul.ingress.hosts }}
   - host: {{ .host.domain | quote }}
     http:
       paths:

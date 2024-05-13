@@ -14,7 +14,7 @@
     </if>
   </appender>
 
-  <logger name="com.softwaremill.bootzooka" level="${LOG_LEVEL:-DEBUG}" additivity="false">
+  <logger name="io.github.greyplane.dbcrul" level="${LOG_LEVEL:-DEBUG}" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
 

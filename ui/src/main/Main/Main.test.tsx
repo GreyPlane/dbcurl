@@ -31,7 +31,7 @@ test("shows app on logged in status", () => {
     </MemoryRouter>,
   );
 
-  expect(screen.getByText("Welcome to Bootzooka!")).toBeInTheDocument();
+  expect(screen.getByText("Welcome to Dbcrul!")).toBeInTheDocument();
 });
 
 test("shows app on logged out status", () => {
@@ -43,5 +43,5 @@ test("shows app on logged out status", () => {
     </MemoryRouter>,
   );
 
-  expect(screen.getByText("Welcome to Bootzooka!")).toBeInTheDocument();
+  expect(screen.getByText("Welcome to Dbcrul!")).toBeInTheDocument();
 });

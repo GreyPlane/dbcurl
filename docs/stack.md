@@ -3,9 +3,9 @@ layout: default
 title:  "Technology stack"
 ---
 
-When picking Bootzooka's technology stack we wanted to use modern, but reasonably proven technologies. So while you won't find the latest, hottest frameworks here, you also won't see any JSPs or &lt;marquee&gt; tags. The components are easy to replace, so if you'd like to experiment with a new library, this should be a matter of replacing only a small part of Bootzooka. Also, we try to update the stack once in a while, so that it's up-to-date with current developments and trends.
+When picking Dbcrul's technology stack we wanted to use modern, but reasonably proven technologies. So while you won't find the latest, hottest frameworks here, you also won't see any JSPs or &lt;marquee&gt; tags. The components are easy to replace, so if you'd like to experiment with a new library, this should be a matter of replacing only a small part of Dbcrul. Also, we try to update the stack once in a while, so that it's up-to-date with current developments and trends.
 
-Bootzooka's stack consists of the following technologies/tools:
+Dbcrul's stack consists of the following technologies/tools:
 
 * [scala](https://www.scala-lang.org) (JVM based language)
 * [http4s](https://http4s.org) (lightweight HTTP library) + [tapir](https://github.com/softwaremill/tapir) (endpoint description library)

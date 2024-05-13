@@ -14,7 +14,7 @@ export const ForkMe: React.FC<ForkMeProps> = ({ children }) => (
       {children}
       <a
         style={{ position: "absolute", top: 0, right: 0, width: "unset", padding: 0 }}
-        href="https://github.com/softwaremill/bootzooka"
+        href="https://github.com/softwaremill/dbcrul"
         target="_blank"
         rel="noopener noreferrer"
       >

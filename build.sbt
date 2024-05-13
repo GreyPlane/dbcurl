@@ -14,50 +14,28 @@ val doobieVersion = "1.0.0-RC5"
 val http4sVersion = "0.23.26"
 val http4sBlazeVersion = "0.23.16"
 val circeVersion = "0.14.6"
-val password4jVersion = "1.8.1"
-val sttpVersion = "3.9.5"
-val prometheusVersion = "0.16.0"
-val tapirVersion = "1.9.0"
+val tapirVersion = "1.10.3"
 val macwireVersion = "2.5.9"
 
 val dbDependencies = Seq(
   "org.tpolecat" %% "doobie-core" % doobieVersion,
   "org.tpolecat" %% "doobie-hikari" % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
-  "org.flywaydb" % "flyway-core" % "9.22.3"
+  "com.mysql" % "mysql-connector-j" % "8.3.0"
 )
 
 val httpDependencies = Seq(
-  "org.http4s" %% "http4s-dsl" % http4sVersion,
   "org.http4s" %% "http4s-blaze-server" % http4sBlazeVersion,
-  "org.http4s" %% "http4s-blaze-client" % http4sBlazeVersion,
   "org.http4s" %% "http4s-circe" % http4sVersion,
-  "com.softwaremill.sttp.client3" %% "async-http-client-backend-fs2" % sttpVersion,
-  "com.softwaremill.sttp.client3" %% "slf4j-backend" % sttpVersion,
   "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % tapirVersion,
-  "com.softwaremill.sttp.tapir" %% "tapir-sttp-stub-server" % tapirVersion
-)
-
-val monitoringDependencies = Seq(
-  "io.prometheus" % "simpleclient" % prometheusVersion,
-  "io.prometheus" % "simpleclient_hotspot" % prometheusVersion,
-  "com.softwaremill.sttp.client3" %% "prometheus-backend" % sttpVersion,
-  "com.softwaremill.sttp.tapir" %% "tapir-prometheus-metrics" % tapirVersion
+  "com.softwaremill.sttp.tapir" %% "tapir-files" % tapirVersion
 )
 
 val jsonDependencies = Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirVersion,
-  "com.softwaremill.sttp.client3" %% "circe" % sttpVersion
-)
-
-val loggingDependencies = Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.5.3",
-  "org.codehaus.janino" % "janino" % "3.1.12" % Runtime,
-  "net.logstash.logback" % "logstash-logback-encoder" % "7.4" % Runtime
+  "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirVersion
 )
 
 val configDependencies = Seq(
@@ -66,20 +44,9 @@ val configDependencies = Seq(
 
 val baseDependencies = Seq(
   "org.typelevel" %% "cats-effect" % "3.5.4",
+  "co.fs2" %% "fs2-core" % "3.10.2",
   "com.softwaremill.common" %% "tagging" % "2.3.4",
   "com.softwaremill.quicklens" %% "quicklens" % "1.9.7"
-)
-
-val apiDocsDependencies = Seq(
-  "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % tapirVersion
-)
-
-val securityDependencies = Seq(
-  "com.password4j" % "password4j" % password4jVersion
-)
-
-val emailDependencies = Seq(
-  "com.sun.mail" % "javax.mail" % "1.6.2" exclude ("javax.activation", "activation")
 )
 
 val scalatest = "org.scalatest" %% "scalatest" % "3.2.18" % Test
@@ -92,29 +59,23 @@ val unitTestingStack = Seq(scalatest)
 val embeddedPostgres = "com.opentable.components" % "otj-pg-embedded" % "1.0.2" % Test
 val dbTestingStack = Seq(embeddedPostgres)
 
-val commonDependencies = baseDependencies ++ unitTestingStack ++ loggingDependencies ++ configDependencies
+val commonDependencies = baseDependencies ++ unitTestingStack ++ configDependencies
 
 lazy val uiProjectName = "ui"
 lazy val uiDirectory = settingKey[File]("Path to the ui project directory")
-lazy val updateYarn = taskKey[Unit]("Update yarn")
-lazy val yarnTask = inputKey[Unit]("Run yarn with arguments")
+lazy val npmTask = inputKey[Unit]("Run npm with arguments")
 lazy val copyWebapp = taskKey[Unit]("Copy webapp")
 
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
-  organization := "com.softwaremill.bootzooka",
+  organization := "io.github.greyplane.dbcrul",
   scalaVersion := "2.13.12",
   libraryDependencies ++= commonDependencies,
   uiDirectory := (ThisBuild / baseDirectory).value / uiProjectName,
-  updateYarn := {
-    streams.value.log("Updating npm/yarn dependencies")
-    haltOnCmdResultError(Process("yarn install", uiDirectory.value).!)
-  },
-  yarnTask := {
+  npmTask := {
     val taskName = spaceDelimited("<arg>").parsed.mkString(" ")
-    updateYarn.value
-    val localYarnCommand = "yarn " + taskName
+    val localYarnCommand = "npm run " + taskName
     def runYarnTask() = Process(localYarnCommand, uiDirectory.value).!
-    streams.value.log("Running yarn task: " + taskName)
+    streams.value.log("Running npm task: " + taskName)
     haltOnCmdResultError(runYarnTask())
   }
 )
@@ -133,12 +94,12 @@ lazy val buildInfoSettings = Seq(
   ),
   buildInfoOptions += BuildInfoOption.ToJson,
   buildInfoOptions += BuildInfoOption.ToMap,
-  buildInfoPackage := "com.softwaremill.bootzooka.version",
+  buildInfoPackage := "io.github.greyplane.dbcrul.version",
   buildInfoObject := "BuildInfo"
 )
 
 lazy val fatJarSettings = Seq(
-  assembly / assemblyJarName := "bootzooka.jar",
+  assembly / assemblyJarName := "dbcrul.jar",
   assembly := assembly.dependsOn(copyWebapp).value,
   assembly / assemblyMergeStrategy := {
     case PathList(ps @ _*) if ps.last endsWith "io.netty.versions.properties"       => MergeStrategy.first
@@ -153,7 +114,7 @@ lazy val fatJarSettings = Seq(
 lazy val dockerSettings = Seq(
   dockerExposedPorts := Seq(8080),
   dockerBaseImage := "adoptopenjdk:11.0.5_10-jdk-hotspot",
-  Docker / packageName := "bootzooka",
+  Docker / packageName := "dbcrul",
   dockerUsername := Some("softwaremill"),
   dockerUpdateLatest := true,
   Docker / publishLocal := (Docker / publishLocal).dependsOn(copyWebapp).value,
@@ -183,7 +144,7 @@ def now(): String = {
 lazy val rootProject = (project in file("."))
   .settings(commonSettings)
   .settings(
-    name := "bootzooka",
+    name := "dbcrul",
     Compile / herokuFatJar := Some((backend / assembly / assemblyOutputPath).value),
     Compile / deployHeroku := ((Compile / deployHeroku) dependsOn (backend / assembly)).value
   )
@@ -191,28 +152,36 @@ lazy val rootProject = (project in file("."))
 
 lazy val backend: Project = (project in file("backend"))
   .settings(
-    libraryDependencies ++= dbDependencies ++ httpDependencies ++ jsonDependencies ++ apiDocsDependencies ++ monitoringDependencies ++ dbTestingStack ++ securityDependencies ++ emailDependencies ++ macwireDependencies,
-    Compile / mainClass := Some("com.softwaremill.bootzooka.Main"),
+    libraryDependencies ++= dbDependencies ++ httpDependencies ++ jsonDependencies ++ macwireDependencies,
+    Compile / mainClass := Some("io.github.greyplane.dbcrul.Main"),
     copyWebapp := {
       val source = uiDirectory.value / "build"
       val target = (Compile / classDirectory).value / "webapp"
       streams.value.log.info(s"Copying the webapp resources from $source to $target")
       IO.copyDirectory(source, target)
     },
-    copyWebapp := copyWebapp.dependsOn(yarnTask.toTask(" build")).value
+    copyWebapp := copyWebapp.dependsOn(npmTask.toTask(" build")).value
   )
   .enablePlugins(BuildInfoPlugin)
+  .enablePlugins(GraalVMNativeImagePlugin)
   .settings(commonSettings)
   .settings(Revolver.settings)
   .settings(buildInfoSettings)
-  .settings(fatJarSettings)
-  .enablePlugins(DockerPlugin)
-  .enablePlugins(JavaServerAppPackaging)
-  .settings(dockerSettings)
+  .settings(
+    graalVMNativeImageOptions ++= List(
+      "-H:IncludeResources=.+\\.conf",
+      "-H:IncludeResources=(.*/)*(.*.css)|(.*.html)|(.*.js)|(.*.json)|(.*.png)$",
+      "--verbose"
+    )
+  )
+//  .settings(fatJarSettings)
+//  .enablePlugins(DockerPlugin)
+//  .enablePlugins(JavaServerAppPackaging)
+//  .settings(dockerSettings)
 
 lazy val ui = (project in file(uiProjectName))
   .settings(commonSettings)
-  .settings(Test / test := (Test / test).dependsOn(yarnTask.toTask(" test:ci")).value)
+  .settings(Test / test := (Test / test).dependsOn(npmTask.toTask(" test:ci")).value)
   .settings(cleanFiles += baseDirectory.value / "build")
 
 RenameProject.settings

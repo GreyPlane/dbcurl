@@ -29,7 +29,7 @@ test("renders brand name", () => {
     </MemoryRouter>,
   );
 
-  expect(screen.getByText("Bootzooka")).toBeInTheDocument();
+  expect(screen.getByText("Dbcrul")).toBeInTheDocument();
 });
 
 test("renders nav bar unlogged user", () => {

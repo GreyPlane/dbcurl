@@ -25,7 +25,7 @@ test("renders main route", () => {
     </MemoryRouter>,
   );
 
-  expect(screen.getByText("Welcome to Bootzooka!")).toBeInTheDocument();
+  expect(screen.getByText("Welcome to Dbcrul!")).toBeInTheDocument();
 });
 
 test("renders protected route for unlogged user", () => {

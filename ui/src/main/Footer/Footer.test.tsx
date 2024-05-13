@@ -14,7 +14,7 @@ test("renders version data", async () => {
 
   renderWithClient(<Footer />);
 
-  const info = screen.getByText(/Bootzooka - application scaffolding by /);
+  const info = screen.getByText(/Dbcrul - application scaffolding by /);
 
   await screen.findAllByRole("loader");
 

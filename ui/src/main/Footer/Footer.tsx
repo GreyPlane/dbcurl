@@ -19,8 +19,8 @@ export const Footer: React.FC = () => {
         <Row>
           <Col sm={6} className="py-4">
             <small>
-              Bootzooka - application scaffolding by <a href="http://softwaremill.com">SoftwareMill</a>, sources
-              available on <a href="https://github.com/softwaremill/bootzooka/">GitHub</a>
+              Dbcrul - application scaffolding by <a href="http://softwaremill.com">SoftwareMill</a>, sources
+              available on <a href="https://github.com/softwaremill/dbcrul/">GitHub</a>
             </small>
           </Col>
           <Col sm={6} className="text-end py-4">
